@@ -4,7 +4,10 @@ import random
 from bird import Bird
 from street import Street
 from river import River
-
+from berry import Berry
+# Add the files from your computer: git add .
+# Commit the files to GitHub: git commit -m "message"
+# git push
 pygame.init()
 pygame.event.set_allowed([pygame.KEYDOWN, pygame.QUIT])
 SCREEN_DIM = WIDTH, HEIGHT = 600, 500
@@ -27,9 +30,17 @@ MENU_IMAGE = pygame.image.load('resources/New Piskel (3).png')
 START_MENU = True
 END_MENU = False
 bird = Bird()
+number_of_berries = 5
+berries = []
+for _ in range(number_of_berries):
+    berries.append(Berry((random.randint(0, WIDTH - Berry.SIZE[0]), random.randint(60, HEIGHT - Berry.SIZE[1]))))
+
+
 streets = []
 number_of_buses = 1
 street_height = 400
+
+
 for _ in range(2):
     streets.append(Street(street_height, 'Left', random.randint(1, number_of_buses)))
     streets.append(Street(street_height - 40, 'Right', random.randint(1, number_of_buses)))
@@ -37,11 +48,13 @@ for _ in range(2):
 
 rivers = []
 number_of_logs = 3
+number_of_alligators = 1
 river_height = 200
 for _ in range(2):
-    rivers.append(River(river_height, 'Left', random.randint(1, number_of_logs)))
-    rivers.append(River(river_height - 30, 'Right', random.randint(1, number_of_logs)))
+    rivers.append(River(river_height, 'Left', random.randint(1, number_of_logs), random.randint(0, number_of_alligators)))
+    rivers.append(River(river_height - 30, 'Right', random.randint(1, number_of_logs), random.randint(0, number_of_alligators)))
     river_height -= 60
+
 
 score = 0
 current_best = 0
@@ -120,8 +133,13 @@ while True:
     for river in rivers:
         # Draw River
         SCREEN.fill(BLUE, river.rect)
+        for alligator in river.alligators:
+            SCREEN.blit(alligator.image, alligator.rect)
+            alligator.move()
+            if bird.rect.colliderect(alligator.rect):
+                bird.reset_position()
 
-        # Log
+                # Log
         for log in river.logs:
             SCREEN.blit(log.image, log.rect)
             log.move()
@@ -132,7 +150,12 @@ while True:
         # Collided with River and not a Log - new
         if not bird_on_log and bird.rect.colliderect(river.rect):
             bird.reset_position()
-#this is me changing the code.
+    for berry in berries:
+        SCREEN.blit(berry.image, berry.rect)
+        if bird.rect.colliderect(berry.rect):
+            score += 250
+            berries.remove(berry)
+
     if 475-bird.rect.top > current_best:
         current_best = 475 - bird.rect.top
     if score + current_best >= high_score:
