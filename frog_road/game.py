@@ -133,11 +133,7 @@ while True:
     for river in rivers:
         # Draw River
         SCREEN.fill(BLUE, river.rect)
-        for alligator in river.alligators:
-            SCREEN.blit(alligator.image, alligator.rect)
-            alligator.move()
-            if bird.rect.colliderect(alligator.rect):
-                bird.reset_position()
+
 
                 # Log
         for log in river.logs:
@@ -146,6 +142,11 @@ while True:
             if bird.rect.colliderect(log.rect):
                 bird.move_on_log(log)
                 bird_on_log = True  # new
+        for alligator in river.alligators:
+            SCREEN.blit(alligator.image, alligator.rect)
+            alligator.move()
+            if bird.rect.colliderect(alligator.rect):
+                bird.reset_position()
 
         # Collided with River and not a Log - new
         if not bird_on_log and bird.rect.colliderect(river.rect):

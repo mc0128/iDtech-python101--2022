@@ -11,8 +11,8 @@ class River:
     def __init__(self, river_height: int, direction: str, number_of_logs: int, number_of_alligators: int):
         self.rect = pygame.Rect((0, river_height), River.SIZE)
         self.logs = []
-        self.add_logs(direction, number_of_logs, river_height + 15, number_of_alligators)
         self.alligators = []
+        self.add_logs(direction, number_of_logs, river_height + 15, number_of_alligators)
 
     def add_logs(self, direction: str, number_of_logs: int, river_height: int, number_of_alligators: int):
         dp = []
