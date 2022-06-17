@@ -132,7 +132,7 @@ while True:
         # Collided with River and not a Log - new
         if not bird_on_log and bird.rect.colliderect(river.rect):
             bird.reset_position()
-
+#this is me changing the code.
     if 475-bird.rect.top > current_best:
         current_best = 475 - bird.rect.top
     if score + current_best >= high_score:
